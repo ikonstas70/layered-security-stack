@@ -6,22 +6,20 @@
   <title>Layered Security Stack — Architecture Reference</title>
   <style>
     :root {
-      --bg:       #080b0f;
-      --bg2:      #0d1117;
-      --bg3:      #161b22;
-      --border:   #21262d;
-      --green:    #39d353;
-      --cyan:     #58a6ff;
-      --purple:   #bc8cff;
-      --orange:   #f0883e;
-      --red:      #f85149;
-      --text:     #c9d1d9;
-      --muted:    #6e7681;
-      --heading:  #e6edf3;
+      --bg:      #080b0f;
+      --bg2:     #0d1117;
+      --bg3:     #161b22;
+      --border:  #21262d;
+      --green:   #39d353;
+      --cyan:    #58a6ff;
+      --purple:  #bc8cff;
+      --orange:  #f0883e;
+      --red:     #f85149;
+      --text:    #c9d1d9;
+      --muted:   #6e7681;
+      --heading: #e6edf3;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       background: var(--bg);
       color: var(--text);
@@ -30,259 +28,185 @@
       line-height: 1.7;
     }
 
-    /* ── HEADER ─────────────────────────────────────────────── */
+    /* ── HEADER ── */
     header {
       border-bottom: 1px solid var(--border);
       padding: 60px 24px 48px;
       text-align: center;
       background: radial-gradient(ellipse at 50% 0%, #0d2137 0%, var(--bg) 70%);
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
     header::before {
       content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 40px,
-        rgba(88, 166, 255, 0.02) 40px,
-        rgba(88, 166, 255, 0.02) 41px
-      );
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 40px,
+        rgba(88,166,255,0.02) 40px, rgba(88,166,255,0.02) 41px);
       pointer-events: none;
     }
     .badge {
       display: inline-block;
-      background: rgba(57, 211, 83, 0.1);
-      border: 1px solid rgba(57, 211, 83, 0.3);
+      background: rgba(57,211,83,0.1);
+      border: 1px solid rgba(57,211,83,0.3);
       color: var(--green);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 20px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 20px;
     }
-    h1 {
-      font-size: clamp(28px, 5vw, 48px);
-      font-weight: 700;
-      color: var(--heading);
-      letter-spacing: -0.5px;
-      margin-bottom: 16px;
-    }
+    h1 { font-size: clamp(28px,5vw,48px); font-weight: 700; color: var(--heading); letter-spacing: -0.5px; margin-bottom: 16px; }
     h1 span { color: var(--cyan); }
-    header p {
-      color: var(--muted);
-      font-size: 16px;
-      max-width: 560px;
-      margin: 0 auto 32px;
-    }
+    header p { color: var(--muted); font-size: 16px; max-width: 560px; margin: 0 auto 32px; }
     .header-tags { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-    .tag {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 6px;
-    }
+    .tag { background: var(--bg3); border: 1px solid var(--border); color: var(--muted); font-size: 12px; padding: 4px 10px; border-radius: 6px; }
 
-    /* ── LAYOUT ─────────────────────────────────────────────── */
+    /* ── LAYOUT ── */
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
     section { padding: 64px 0; border-bottom: 1px solid var(--border); }
     section:last-child { border-bottom: none; }
-
-    h2 {
-      font-size: 22px;
-      font-weight: 600;
-      color: var(--heading);
-      margin-bottom: 8px;
-    }
+    h2 { font-size: 22px; font-weight: 600; color: var(--heading); margin-bottom: 8px; }
     h2 .icon { margin-right: 10px; }
-    .section-sub {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 36px;
-    }
-    h3 {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--heading);
-      margin-bottom: 10px;
-    }
+    .section-sub { color: var(--muted); font-size: 14px; margin-bottom: 36px; }
+    h3 { font-size: 15px; font-weight: 600; color: var(--heading); margin-bottom: 10px; }
 
-    /* ── TOPOLOGY DIAGRAM ───────────────────────────────────── */
-    .topology-wrap {
+    /* ── TOPOLOGY CSS BOXES ── */
+    .topo-wrap {
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
     }
-    .topology-header {
+    .topo-titlebar {
       background: var(--bg3);
       border-bottom: 1px solid var(--border);
       padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex; align-items: center; gap: 8px;
     }
     .dot { width: 10px; height: 10px; border-radius: 50%; }
-    .dot-r { background: #f85149; }
-    .dot-y { background: #f0883e; }
-    .dot-g { background: #39d353; }
-    .topology-header span { color: var(--muted); font-size: 12px; margin-left: auto; }
-    pre.topology {
-      padding: 28px 24px;
-      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-      font-size: 12.5px;
-      line-height: 1.55;
-      color: #8b949e;
-      overflow-x: auto;
-      white-space: pre;
-    }
-    pre.topology .hl-g  { color: var(--green); }
-    pre.topology .hl-b  { color: var(--cyan); }
-    pre.topology .hl-p  { color: var(--purple); }
-    pre.topology .hl-o  { color: var(--orange); }
-    pre.topology .hl-w  { color: var(--heading); }
+    .dot-r { background: #f85149; } .dot-y { background: #f0883e; } .dot-g { background: #39d353; }
+    .topo-titlebar span { color: var(--muted); font-size: 12px; margin-left: auto; font-family: monospace; }
 
-    /* ── COMPONENT GRID ─────────────────────────────────────── */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-      transition: border-color 0.2s;
-    }
-    .card:hover { border-color: #30363d; }
-    .card-icon {
-      font-size: 22px;
-      margin-bottom: 12px;
-      display: block;
-    }
-    .card h3 { margin-bottom: 6px; }
-    .card p { color: var(--muted); font-size: 13px; line-height: 1.6; }
-    .card .tech {
-      margin-top: 12px;
-      font-size: 11px;
-      color: var(--cyan);
-      font-family: 'SF Mono', monospace;
-      letter-spacing: 0.5px;
-    }
+    .topo-body { padding: 32px 24px; }
 
-    /* ── FLOW DIAGRAMS ──────────────────────────────────────── */
-    .flows { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media (max-width: 700px) { .flows { grid-template-columns: 1fr; } }
-    .flow-card {
-      background: var(--bg2);
+    /* tier row */
+    .topo-tier {
       border: 1px solid var(--border);
       border-radius: 10px;
       overflow: hidden;
+      margin-bottom: 0;
     }
-    .flow-title {
-      background: var(--bg3);
+    .topo-tier-label {
+      padding: 8px 16px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
       border-bottom: 1px solid var(--border);
-      padding: 10px 16px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--heading);
-      letter-spacing: 0.5px;
     }
-    pre.flow {
+    .tier-client .topo-tier-label  { background: rgba(88,166,255,0.08);  color: var(--cyan); }
+    .tier-vps    .topo-tier-label  { background: rgba(188,140,255,0.08); color: var(--purple); }
+    .tier-net    .topo-tier-label  { background: rgba(240,136,62,0.08);  color: var(--orange); }
+
+    .topo-tier-boxes {
+      display: flex; flex-wrap: wrap; gap: 10px;
       padding: 16px;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 11.5px;
-      color: #8b949e;
-      line-height: 1.6;
-      overflow-x: auto;
+      background: var(--bg2);
+    }
+    .tbox {
+      display: flex; flex-direction: column;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      min-width: 140px;
+      flex: 1;
+      transition: border-color .2s, transform .15s;
+      cursor: default;
+    }
+    .tbox:hover { transform: translateY(-2px); }
+    .tier-client .tbox:hover { border-color: rgba(88,166,255,0.5); }
+    .tier-vps    .tbox:hover { border-color: rgba(188,140,255,0.5); }
+    .tier-net    .tbox:hover { border-color: rgba(240,136,62,0.5); }
+
+    .tbox-icon  { font-size: 18px; margin-bottom: 6px; }
+    .tbox-name  { font-size: 13px; font-weight: 600; color: var(--heading); margin-bottom: 3px; }
+    .tbox-sub   { font-size: 11px; color: var(--muted); font-family: monospace; }
+
+    /* connector arrows between tiers */
+    .topo-connector {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 2px;
+      padding: 10px 0;
+    }
+    .conn-line {
+      width: 2px; height: 28px;
+      background: linear-gradient(to bottom, var(--border), #30363d);
+    }
+    .conn-label {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 11px; color: var(--muted);
+      font-family: monospace; letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+    .conn-arrow {
+      font-size: 14px; color: var(--muted); line-height: 1;
+    }
+    .conn-line2 {
+      width: 2px; height: 16px;
+      background: linear-gradient(to bottom, #30363d, transparent);
     }
 
-    /* ── DECISIONS ──────────────────────────────────────────── */
-    .decision {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--cyan);
-      border-radius: 0 10px 10px 0;
-      padding: 20px 24px;
-      margin-bottom: 16px;
-    }
+    /* ── COMPONENT GRID ── */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; transition: border-color .2s; }
+    .card:hover { border-color: #30363d; }
+    .card-icon { font-size: 22px; margin-bottom: 12px; display: block; }
+    .card h3 { margin-bottom: 6px; }
+    .card p { color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .card .tech { margin-top: 12px; font-size: 11px; color: var(--cyan); font-family: monospace; letter-spacing: .5px; }
+
+    /* ── FLOWS ── */
+    .flows { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 700px) { .flows { grid-template-columns: 1fr; } }
+    .flow-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .flow-title { background: var(--bg3); border-bottom: 1px solid var(--border); padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--heading); letter-spacing: .5px; }
+    pre.flow { padding: 16px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11.5px; color: #8b949e; line-height: 1.6; overflow-x: auto; }
+
+    /* ── DECISIONS ── */
+    .decision { background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--cyan); border-radius: 0 10px 10px 0; padding: 20px 24px; margin-bottom: 16px; }
     .decision h3 { color: var(--cyan); margin-bottom: 8px; }
     .decision p { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
-    pre.code-inline {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 12px 16px;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 12px;
-      color: var(--green);
-      overflow-x: auto;
-    }
+    pre.code-inline { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 12px 16px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; color: var(--green); overflow-x: auto; }
 
-    /* ── FIXES ──────────────────────────────────────────────── */
-    .fix {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-      margin-bottom: 16px;
-    }
+    /* ── FIXES ── */
+    .fix { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 16px; }
     .fix-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-    .fix-num {
-      background: rgba(248, 81, 73, 0.15);
-      color: var(--red);
-      border: 1px solid rgba(248, 81, 73, 0.3);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-    .fix-num.solved { background: rgba(57, 211, 83, 0.1); color: var(--green); border-color: rgba(57, 211, 83, 0.3); }
+    .fix-num { background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid rgba(248,81,73,0.3); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+    .fix-num.solved { background: rgba(57,211,83,0.1); color: var(--green); border-color: rgba(57,211,83,0.3); }
     .fix h3 { color: var(--heading); font-size: 15px; }
     .fix p { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
 
-    /* ── TECH TABLE ─────────────────────────────────────────── */
+    /* ── TABLE ── */
+    .table-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
     table { width: 100%; border-collapse: collapse; }
-    th {
-      background: var(--bg3);
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 10px 14px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-    td {
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-      color: var(--text);
-    }
+    th { background: var(--bg3); color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text); }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: rgba(255,255,255,0.02); }
-    td:first-child { color: var(--cyan); font-family: 'SF Mono', monospace; font-size: 12px; }
-    .table-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    td:first-child { color: var(--cyan); font-family: monospace; font-size: 12px; }
 
-    /* ── FOOTER ─────────────────────────────────────────────── */
-    footer {
-      text-align: center;
-      padding: 48px 24px;
-      color: var(--muted);
-      font-size: 13px;
-      border-top: 1px solid var(--border);
-    }
+    /* ── FOOTER ── */
+    footer { text-align: center; padding: 48px 24px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); }
     footer a { color: var(--cyan); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .tbox { min-width: 110px; }
+      .topo-body { padding: 20px 12px; }
+    }
   </style>
 </head>
 <body>
 
-<!-- ── HEADER ──────────────────────────────────────────────────────────────── -->
 <header>
   <div class="badge">Educational Reference</div>
   <h1>Layered <span>Security Stack</span></h1>
@@ -301,117 +225,151 @@
 
 <div class="container">
 
-<!-- ── TOPOLOGY ────────────────────────────────────────────────────────────── -->
+<!-- TOPOLOGY -->
 <section>
   <h2><span class="icon">🗺</span>Architecture Overview</h2>
   <p class="section-sub">Full-tunnel VPN exit node with layered defense — IDS, SIEM, encrypted DNS, and blocklists.</p>
 
-  <div class="topology-wrap">
-    <div class="topology-header">
+  <div class="topo-wrap">
+    <div class="topo-titlebar">
       <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
-      <span>network-topology.txt</span>
+      <span>network-topology — layered-security-stack</span>
     </div>
-<pre class="topology">
-<span class="hl-w">┌──────────────────────────────────────────────────────────────────────────┐</span>
-<span class="hl-w">│                           CLIENT MACHINE                                 │</span>
-<span class="hl-w">│                                                                          │</span>
-<span class="hl-b">│  ┌──────────────┐  ┌─────────────┐  ┌──────────┐  ┌──────────────────┐  │</span>
-<span class="hl-b">│  │  WireGuard   │  │Wazuh Agent  │  │  Snort   │  │  OSSEC Agent     │  │</span>
-<span class="hl-b">│  │  Full Tunnel │  │    SIEM     │  │  IDS     │  │  Host-based IDS  │  │</span>
-<span class="hl-b">│  └──────┬───────┘  └─────────────┘  └──────────┘  └──────────────────┘  │</span>
-<span class="hl-w">│         │  AllowedIPs = 0.0.0.0/0 + ::/0  (all traffic)                 │</span>
-<span class="hl-w">└─────────┼────────────────────────────────────────────────────────────────┘</span>
-          <span class="hl-g">│</span>
-          <span class="hl-g">│  UDP encrypted (WireGuard ChaCha20-Poly1305)</span>
-          <span class="hl-g">│  PersistentKeepalive = 25s</span>
-          <span class="hl-g">▼</span>
-<span class="hl-w">┌──────────────────────────────────────────────────────────────────────────┐</span>
-<span class="hl-w">│                         VPS / EXIT NODE                                  │</span>
-<span class="hl-w">│                                                                          │</span>
-<span class="hl-p">│  ┌──────────┐  ┌──────────────┐  ┌────────┐  ┌───────────────────────┐  │</span>
-<span class="hl-p">│  │WireGuard │  │dnscrypt-proxy│  │ Snort  │  │  iptables + ipset     │  │</span>
-<span class="hl-p">│  │  Server  │  │  DoH :53     │  │  IDS   │  │  Feodo/ET/Tor blocks  │  │</span>
-<span class="hl-p">│  └──────────┘  └──────────────┘  └────────┘  └───────────────────────┘  │</span>
-<span class="hl-p">│  ┌──────────┐  ┌──────────────┐  ┌────────┐                             │</span>
-<span class="hl-p">│  │  nginx   │  │  fail2ban    │  │ Wazuh  │                             │</span>
-<span class="hl-p">│  │TLS 1.2/3 │  │  SSH guard   │  │Manager │                             │</span>
-<span class="hl-p">│  └──────────┘  └──────────────┘  └────────┘                             │</span>
-<span class="hl-w">│                        │  NAT MASQUERADE (iptables)                      │</span>
-<span class="hl-w">└────────────────────────┼─────────────────────────────────────────────────┘</span>
-                         <span class="hl-o">▼</span>
-                   <span class="hl-o">[ INTERNET ]</span>
-             <span class="hl-o">Exit IP = VPS public IP</span>
-             <span class="hl-o">Real client IP never exposed</span>
-</pre>
+    <div class="topo-body">
+
+      <!-- CLIENT TIER -->
+      <div class="topo-tier tier-client">
+        <div class="topo-tier-label">&#x25C6; CLIENT MACHINE</div>
+        <div class="topo-tier-boxes">
+          <div class="tbox">
+            <div class="tbox-icon">🔐</div>
+            <div class="tbox-name">WireGuard</div>
+            <div class="tbox-sub">Full Tunnel · 0/0</div>
+          </div>
+          <div class="tbox">
+            <div class="tbox-icon">📊</div>
+            <div class="tbox-name">Wazuh Agent</div>
+            <div class="tbox-sub">SIEM · FIM · Events</div>
+          </div>
+          <div class="tbox">
+            <div class="tbox-icon">👁</div>
+            <div class="tbox-name">Snort IDS</div>
+            <div class="tbox-sub">Passive · local tap</div>
+          </div>
+          <div class="tbox">
+            <div class="tbox-icon">🏠</div>
+            <div class="tbox-name">OSSEC Agent</div>
+            <div class="tbox-sub">HIDS · auth logs</div>
+          </div>
+          <div class="tbox">
+            <div class="tbox-icon">☁️</div>
+            <div class="tbox-name">cloudflared</div>
+            <div class="tbox-sub">QUIC tunnel · no open ports</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARROW 1 -->
+      <div class="topo-connector">
+        <div class="conn-line"></div>
+        <div class="conn-label">UDP encrypted · ChaCha20-Poly1305 · port 51820</div>
+        <div class="conn-line2"></div>
+        <div class="conn-arrow">▼</div>
+      </div>
+
+      <!-- VPS TIER -->
+      <div class="topo-tier tier-vps">
+        <div class="topo-tier-label">&#x25C6; VPS / EXIT NODE · 150.x.x.x</div>
+        <div class="topo-tier-boxes">
+          <div class="tbox">
+            <div class="tbox-icon">🔐</div>
+            <div class="tbox-name">WireGuard</div>
+            <div class="tbox-sub">Server · :51820</div>
+          </div>
+          <div class="tbox">
+            <div class="tbox-icon">🌐</div>
+            <div class="tbox-name">dnscrypt-proxy</div>
+            <div class="tbox-sub">DoH · :53 · VPN only</div>
+          </div>
+          <div class="tbox">
+            <div class="tbox-icon">👁</div>
+            <div class="tbox-name">Snort IDS</div>
+            <div class="tbox-sub">WAN + VPN taps</div>
+          </div>
+          <div class="tbox">
+            <div class="tbox-icon">🧱</div>
+            <div class="tbox-name">iptables + ipset</div>
+            <div class="tbox-sub">NAT · 1800+ blocks</div>
+          </div>
+          <div class="tbox">
+            <div class="tbox-icon">🚫</div>
+            <div class="tbox-name">fail2ban</div>
+            <div class="tbox-sub">SSH guard · auto-ban</div>
+          </div>
+          <div class="tbox">
+            <div class="tbox-icon">📊</div>
+            <div class="tbox-name">Wazuh Manager</div>
+            <div class="tbox-sub">Correlation · alerts</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARROW 2 -->
+      <div class="topo-connector">
+        <div class="conn-line"></div>
+        <div class="conn-label">NAT MASQUERADE · iptables POSTROUTING · client IP hidden</div>
+        <div class="conn-line2"></div>
+        <div class="conn-arrow">▼</div>
+      </div>
+
+      <!-- INTERNET TIER -->
+      <div class="topo-tier tier-net">
+        <div class="topo-tier-label">&#x25C6; INTERNET</div>
+        <div class="topo-tier-boxes">
+          <div class="tbox">
+            <div class="tbox-icon">🌍</div>
+            <div class="tbox-name">Public Internet</div>
+            <div class="tbox-sub">Exit IP = VPS · real IP never exposed</div>
+          </div>
+          <div class="tbox">
+            <div class="tbox-icon">🔒</div>
+            <div class="tbox-name">Cloudflare Edge</div>
+            <div class="tbox-sub">DDoS · WAF · TLS term</div>
+          </div>
+          <div class="tbox">
+            <div class="tbox-icon">🛡</div>
+            <div class="tbox-name">Threat Feeds</div>
+            <div class="tbox-sub">Feodo · ET · Tor · daily sync</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
-<!-- ── COMPONENTS ───────────────────────────────────────────────────────────── -->
+<!-- COMPONENTS -->
 <section>
   <h2><span class="icon">⚙️</span>Stack Components</h2>
   <p class="section-sub">Each layer has a specific responsibility. Defense in depth — no single point of failure.</p>
-
   <div class="grid">
-    <div class="card">
-      <span class="card-icon">🔐</span>
-      <h3>WireGuard VPN</h3>
-      <p>Full-tunnel client/server. All traffic — IPv4 and IPv6 — encrypted and routed through the VPS. Client real IP never reaches the destination.</p>
-      <div class="tech">ChaCha20-Poly1305 · UDP · AllowedIPs 0/0</div>
-    </div>
-    <div class="card">
-      <span class="card-icon">🌐</span>
-      <h3>dnscrypt-proxy</h3>
-      <p>DNS-over-HTTPS server running on the VPS, served only to VPN clients. All DNS queries are encrypted inside the tunnel before leaving the VPS.</p>
-      <div class="tech">DoH · 1.1.1.1 · 9.9.9.9 · no plain-text DNS</div>
-    </div>
-    <div class="card">
-      <span class="card-icon">👁</span>
-      <h3>Snort IDS</h3>
-      <p>Passive packet inspection on WAN, VPN, and container interfaces. Custom rules detect SSH brute force, web shells, SQLi, path traversal, and recon.</p>
-      <div class="tech">SID 9000001–9000008 · fast alert mode</div>
-    </div>
-    <div class="card">
-      <span class="card-icon">📊</span>
-      <h3>Wazuh SIEM</h3>
-      <p>Centralized log and event collection. Agent on client ships FIM alerts, vulnerability data, and auth events to the manager for correlation and alerting.</p>
-      <div class="tech">FIM · Vuln detection · Active response</div>
-    </div>
-    <div class="card">
-      <span class="card-icon">🏠</span>
-      <h3>OSSEC</h3>
-      <p>Host-based IDS running alongside Wazuh. Monitors system files, auth logs, and processes. Active response can ban IPs or kill processes on detection.</p>
-      <div class="tech">HIDS · log analysis · file integrity</div>
-    </div>
-    <div class="card">
-      <span class="card-icon">🧱</span>
-      <h3>iptables + ipset</h3>
-      <p>NAT masquerade for VPN forwarding. ipset blocklists updated daily from Feodo, Emerging Threats, and Tor exit feeds. Zero-downtime atomic swaps.</p>
-      <div class="tech">ipset hash:ip · 1,800+ blocked IPs</div>
-    </div>
-    <div class="card">
-      <span class="card-icon">🚫</span>
-      <h3>fail2ban</h3>
-      <p>SSH brute-force protection. Monitors auth logs and inserts iptables DROP rules after N failed attempts. Automatically expires bans.</p>
-      <div class="tech">sshd jail · iptables · auto-expire</div>
-    </div>
-    <div class="card">
-      <span class="card-icon">☁️</span>
-      <h3>Cloudflare Tunnel</h3>
-      <p>Exposes internal web services without opening any inbound ports. Traffic arrives encrypted from Cloudflare's edge — no public IP exposure of origin.</p>
-      <div class="tech">QUIC/H2 · zero open ports · DDoS shielded</div>
-    </div>
+    <div class="card"><span class="card-icon">🔐</span><h3>WireGuard VPN</h3><p>Full-tunnel client/server. All traffic — IPv4 and IPv6 — encrypted and routed through the VPS. Client real IP never reaches the destination.</p><div class="tech">ChaCha20-Poly1305 · UDP · AllowedIPs 0/0</div></div>
+    <div class="card"><span class="card-icon">🌐</span><h3>dnscrypt-proxy</h3><p>DNS-over-HTTPS server running on the VPS, served only to VPN clients. All DNS queries are encrypted inside the tunnel before leaving the VPS.</p><div class="tech">DoH · 1.1.1.1 · 9.9.9.9 · no plain-text DNS</div></div>
+    <div class="card"><span class="card-icon">👁</span><h3>Snort IDS</h3><p>Passive packet inspection on WAN, VPN, and container interfaces. Custom rules detect SSH brute force, web shells, SQLi, path traversal, and recon.</p><div class="tech">SID 9000001–9000008 · fast alert mode</div></div>
+    <div class="card"><span class="card-icon">📊</span><h3>Wazuh SIEM</h3><p>Centralized log and event collection. Agent on client ships FIM alerts, vulnerability data, and auth events to the manager for correlation and alerting.</p><div class="tech">FIM · Vuln detection · Active response</div></div>
+    <div class="card"><span class="card-icon">🏠</span><h3>OSSEC</h3><p>Host-based IDS running alongside Wazuh. Monitors system files, auth logs, and processes. Active response can ban IPs or kill processes on detection.</p><div class="tech">HIDS · log analysis · file integrity</div></div>
+    <div class="card"><span class="card-icon">🧱</span><h3>iptables + ipset</h3><p>NAT masquerade for VPN forwarding. ipset blocklists updated daily from Feodo, Emerging Threats, and Tor exit feeds. Zero-downtime atomic swaps.</p><div class="tech">ipset hash:ip · 1,800+ blocked IPs</div></div>
+    <div class="card"><span class="card-icon">🚫</span><h3>fail2ban</h3><p>SSH brute-force protection. Monitors auth logs and inserts iptables DROP rules after N failed attempts. Automatically expires bans.</p><div class="tech">sshd jail · iptables · auto-expire</div></div>
+    <div class="card"><span class="card-icon">☁️</span><h3>Cloudflare Tunnel</h3><p>Exposes internal web services without opening any inbound ports. Traffic arrives encrypted from Cloudflare's edge — no public IP exposure of origin.</p><div class="tech">QUIC/H2 · zero open ports · DDoS shielded</div></div>
   </div>
 </section>
 
-<!-- ── NETWORK FLOWS ─────────────────────────────────────────────────────────── -->
+<!-- FLOWS -->
 <section>
   <h2><span class="icon">🔄</span>Network Flows</h2>
   <p class="section-sub">How traffic moves through each path in the stack.</p>
-
   <div class="flows">
-    <div class="flow-card">
-      <div class="flow-title">FLOW 1 — Full Tunnel (all outbound)</div>
-<pre class="flow">CLIENT
+    <div class="flow-card"><div class="flow-title">FLOW 1 — Full Tunnel (all outbound)</div><pre class="flow">CLIENT
   │ AllowedIPs = 0.0.0.0/0, ::/0
   │ ALL traffic enters tunnel
   │
@@ -427,12 +385,8 @@
   │                        INTERNET
   │
   └── Your visible IP = VPS IP ✓
-      Real IP = hidden ✓</pre>
-    </div>
-
-    <div class="flow-card">
-      <div class="flow-title">FLOW 2 — DNS (encrypted, no leaks)</div>
-<pre class="flow">Client app queries DNS
+      Real IP = hidden ✓</pre></div>
+    <div class="flow-card"><div class="flow-title">FLOW 2 — DNS (encrypted, no leaks)</div><pre class="flow">Client app queries DNS
   └─► OS stub resolver
         └─► VPN_SERVER:53
             (inside encrypted tunnel)
@@ -443,16 +397,11 @@
 
 DNS never leaves tunnel unencrypted.
 DNS server only reachable via VPN.
-Fallback: secondary public DNS.
 
 Verify:
   dig google.com | grep SERVER
-  → should show VPN server IP</pre>
-    </div>
-
-    <div class="flow-card">
-      <div class="flow-title">FLOW 3 — Inbound Web (Cloudflare)</div>
-<pre class="flow">Browser
+  → should show VPN server IP</pre></div>
+    <div class="flow-card"><div class="flow-title">FLOW 3 — Inbound Web (Cloudflare)</div><pre class="flow">Browser
   └─► Cloudflare Edge
         │  TLS termination
         │  DDoS / bot filtering
@@ -465,18 +414,13 @@ Verify:
         ▼
   Security Proxy (localhost)
         │ Blocks: SQLi, SSRF,
-        │  path traversal, scanners,
-        │  .env/.git access
+        │  path traversal, scanners
         ▼
-  Backend (localhost only)</pre>
-    </div>
-
-    <div class="flow-card">
-      <div class="flow-title">FLOW 4 — Attack Detection</div>
-<pre class="flow">Network traffic
+  Backend (localhost only)</pre></div>
+    <div class="flow-card"><div class="flow-title">FLOW 4 — Attack Detection</div><pre class="flow">Network traffic
   └─► Snort IDS (passive tap)
-        │  WAN + VPN + docker interfaces
-        │  Custom rules: SID 9000001–8
+        │  WAN + VPN + docker
+        │  Custom rules SID 9000001–8
         └─► snort.alert.fast
               └─► Wazuh / OSSEC
                     └─► Correlation
@@ -487,128 +431,64 @@ iptables blocklists (daily update):
   ├─► ET compromised hosts
   └─► Tor exit nodes
 
-fail2ban:
-  └─► auth.log → >5 fails → DROP</pre>
-    </div>
+fail2ban: auth.log → >5 fails → DROP</pre></div>
   </div>
 </section>
 
-<!-- ── DESIGN DECISIONS ─────────────────────────────────────────────────────── -->
+<!-- DECISIONS -->
 <section>
   <h2><span class="icon">🏗</span>Key Design Decisions</h2>
   <p class="section-sub">Non-obvious choices and the reasoning behind them.</p>
-
-  <div class="decision">
-    <h3>WireGuard: INSERT not APPEND to FORWARD chain</h3>
-    <p>Docker adds a REJECT rule to the iptables FORWARD chain. Using <code>-A</code> (append) places your WireGuard ACCEPT rule after Docker's REJECT — VPN traffic is silently dropped.</p>
-<pre class="code-inline"># Wrong — sits after Docker's REJECT
+  <div class="decision"><h3>WireGuard: INSERT not APPEND to FORWARD chain</h3><p>Docker adds a REJECT rule to the iptables FORWARD chain. Using <code>-A</code> (append) places your WireGuard ACCEPT rule after Docker's REJECT — VPN traffic is silently dropped.</p><pre class="code-inline"># Wrong — sits after Docker's REJECT
 iptables -A FORWARD -i wg0 -j ACCEPT
 
 # Correct — inserted at position 1, before Docker
-iptables -I FORWARD 1 -i wg0 -j ACCEPT</pre>
-  </div>
-
-  <div class="decision">
-    <h3>IPv6 ULA prefix prevents ISP address leaks</h3>
-    <p>A full tunnel with only <code>AllowedIPs = 0.0.0.0/0</code> still leaves IPv6 exposed. Assign a ULA prefix (<code>fd00::/8</code>) to the VPN interface and include <code>::/0</code> in AllowedIPs. IPv6 traffic stays inside the tunnel.</p>
-  </div>
-
-  <div class="decision">
-    <h3>Multiple tunnels: specific host route wins over subnet route</h3>
-    <p>When two WireGuard tunnels claim overlapping subnets, the secondary tunnel's route blackholes traffic to the VPN server's internal IP. Fix: add a /32 host route through the correct interface.</p>
-<pre class="code-inline"># Find the interface carrying internet (primary tunnel)
-IFACE=$(route -n get 8.8.8.8 | awk '/interface:/{print $2}')
-
-# Force VPN server internal IP through the correct tunnel
-route add -host VPN_INTERNAL_IP -interface "$IFACE"</pre>
-  </div>
-
-  <div class="decision">
-    <h3>TLS: enforce 1.2/1.3, remove legacy from default config</h3>
-    <p>nginx ships a global <code>ssl_protocols</code> directive that includes TLS 1.0/1.1. Even if your server block overrides it, the global value can be inherited. Remove it at the global level.</p>
-<pre class="code-inline">ssl_protocols TLSv1.2 TLSv1.3;
-ssl_ciphers "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:...";
-ssl_prefer_server_ciphers off;</pre>
-  </div>
-
-  <div class="decision">
-    <h3>SSH: always maintain a tunnel-based alias</h3>
-    <p>Cloud firewall rules may block port 22 from unknown source IPs. The VPN server's internal IP is only reachable through the tunnel — bypassing external firewall rules entirely. Always keep a <code>vpn-tunnel</code> SSH alias pointing to the internal IP.</p>
-  </div>
+iptables -I FORWARD 1 -i wg0 -j ACCEPT</pre></div>
+  <div class="decision"><h3>IPv6 ULA prefix prevents ISP address leaks</h3><p>A full tunnel with only <code>AllowedIPs = 0.0.0.0/0</code> still leaves IPv6 exposed. Assign a ULA prefix (<code>fd00::/8</code>) to the VPN interface and include <code>::/0</code> in AllowedIPs.</p></div>
+  <div class="decision"><h3>Multiple tunnels: specific host route wins over subnet route</h3><p>When two WireGuard tunnels claim overlapping subnets, the secondary tunnel's route blackholes traffic to the VPN server's internal IP.</p><pre class="code-inline">IFACE=$(route -n get 8.8.8.8 | awk '/interface:/{print $2}')
+route add -host VPN_INTERNAL_IP -interface "$IFACE"</pre></div>
+  <div class="decision"><h3>TLS: enforce 1.2/1.3, remove legacy from default config</h3><p>nginx ships a global <code>ssl_protocols</code> directive that includes TLS 1.0/1.1. Remove it at the global level.</p><pre class="code-inline">ssl_protocols TLSv1.2 TLSv1.3;
+ssl_ciphers "ECDHE-ECDSA-AES128-GCM-SHA256:...";
+ssl_prefer_server_ciphers off;</pre></div>
+  <div class="decision"><h3>SSH: always maintain a tunnel-based alias</h3><p>Cloud firewall rules may block port 22 from unknown source IPs. The VPN server's internal IP is only reachable through the tunnel — bypassing external firewall rules entirely.</p></div>
 </section>
 
-<!-- ── OPERATIONAL FIXES ─────────────────────────────────────────────────────── -->
+<!-- FIXES -->
 <section>
   <h2><span class="icon">🔧</span>Operational Fixes</h2>
   <p class="section-sub">Real issues encountered in production and how they were resolved.</p>
-
-  <div class="fix">
-    <div class="fix-header">
-      <span class="fix-num solved">RESOLVED</span>
-      <h3>Full tunnel + unreachable VPN server = total internet loss</h3>
-    </div>
-    <p>AllowedIPs 0.0.0.0/0 routes all traffic into the tunnel. If the VPN server goes down, all traffic enters the tunnel and disappears. Fix: bring down the tunnel to restore the default gateway, then investigate the server.</p>
-<pre class="code-inline">sudo wg-quick down /path/to/client.conf</pre>
-  </div>
-
-  <div class="fix">
-    <div class="fix-header">
-      <span class="fix-num solved">RESOLVED</span>
-      <h3>Two active tunnels blackhole traffic to VPN server internal IP</h3>
-    </div>
-    <p>Secondary tunnel claims the VPN subnet. SSH and DNS to the VPN server stop working. Traceroute shows all stars. Fix: add a specific /32 host route through the primary tunnel interface (see design decisions above).</p>
-  </div>
-
-  <div class="fix">
-    <div class="fix-header">
-      <span class="fix-num solved">RESOLVED</span>
-      <h3>DNS leaking to public fallback due to routing conflict</h3>
-    </div>
-    <p>Same routing bug causes DNS queries to VPN server (port 53) to be blackholed. OS falls back to secondary public DNS. DNS still works but queries are unencrypted and outside the tunnel. Resolved by fixing the routing conflict.</p>
-  </div>
-
-  <div class="fix">
-    <div class="fix-header">
-      <span class="fix-num solved">RESOLVED</span>
-      <h3>nginx serving TLS 1.0/1.1 — SSLv2 exploit attempt detected</h3>
-    </div>
-    <p>Snort detected an SSLv2 Client_Hello overflow attempt. nginx default config included TLS 1.0/1.1. Removed from global config, enforced TLS 1.2/1.3 only, reloaded nginx zero-downtime. The automated scanner's attempt returned 499 (rejected).</p>
-  </div>
+  <div class="fix"><div class="fix-header"><span class="fix-num solved">RESOLVED</span><h3>Full tunnel + unreachable VPN server = total internet loss</h3></div><p>AllowedIPs 0.0.0.0/0 routes all traffic into the tunnel. If the VPN server goes down, all traffic disappears. Fix: bring down the tunnel to restore the default gateway.</p><pre class="code-inline">sudo wg-quick down /path/to/client.conf</pre></div>
+  <div class="fix"><div class="fix-header"><span class="fix-num solved">RESOLVED</span><h3>Two active tunnels blackhole traffic to VPN server internal IP</h3></div><p>Secondary tunnel claims the VPN subnet. SSH and DNS to the VPN server stop working. Fix: add a specific /32 host route through the primary tunnel interface.</p></div>
+  <div class="fix"><div class="fix-header"><span class="fix-num solved">RESOLVED</span><h3>DNS leaking to public fallback due to routing conflict</h3></div><p>Same routing bug causes DNS queries to VPN server to be blackholed. OS falls back to secondary public DNS — queries are unencrypted and outside the tunnel.</p></div>
+  <div class="fix"><div class="fix-header"><span class="fix-num solved">RESOLVED</span><h3>nginx serving TLS 1.0/1.1 — SSLv2 exploit attempt detected</h3></div><p>Snort detected an SSLv2 Client_Hello overflow attempt. Removed legacy protocols from global nginx config, enforced TLS 1.2/1.3 only, reloaded zero-downtime.</p></div>
 </section>
 
-<!-- ── ALTERNATIVES ──────────────────────────────────────────────────────────── -->
+<!-- ALTERNATIVES -->
 <section>
   <h2><span class="icon">🔀</span>Technology Alternatives</h2>
   <p class="section-sub">This architecture is implementation-agnostic. Swap components to suit your environment.</p>
-
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>Layer</th><th>This Stack</th><th>Alternatives</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>VPN</td><td>WireGuard</td><td>OpenVPN, IPSec/IKEv2, Tailscale, Nebula</td></tr>
-        <tr><td>Network IDS</td><td>Snort</td><td>Suricata, Zeek, Arkime</td></tr>
-        <tr><td>SIEM</td><td>Wazuh</td><td>Elastic SIEM, Splunk, Graylog</td></tr>
-        <tr><td>Host IDS</td><td>OSSEC</td><td>Tripwire, AIDE, Falco, Samhain</td></tr>
-        <tr><td>DNS</td><td>dnscrypt-proxy</td><td>Pi-hole + DoH, Unbound, AdGuard Home</td></tr>
-        <tr><td>Firewall</td><td>iptables + ipset</td><td>nftables, pf (BSD/macOS), ufw + ipset</td></tr>
-        <tr><td>Brute-force</td><td>fail2ban</td><td>CrowdSec, DenyHosts, SSHGuard</td></tr>
-        <tr><td>Reverse proxy</td><td>nginx</td><td>Caddy, HAProxy, Traefik, Envoy</td></tr>
-        <tr><td>Tunnel / Ingress</td><td>Cloudflare Tunnel</td><td>ngrok, frp, Tailscale Funnel, bore</td></tr>
-        <tr><td>Threat Intel</td><td>Feodo + ET + Tor</td><td>AbuseIPDB, Spamhaus, AlienVault OTX, GreyNoise</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Layer</th><th>This Stack</th><th>Alternatives</th></tr></thead>
+    <tbody>
+      <tr><td>VPN</td><td>WireGuard</td><td>OpenVPN, IPSec/IKEv2, Tailscale, Nebula</td></tr>
+      <tr><td>Network IDS</td><td>Snort</td><td>Suricata, Zeek, Arkime</td></tr>
+      <tr><td>SIEM</td><td>Wazuh</td><td>Elastic SIEM, Splunk, Graylog</td></tr>
+      <tr><td>Host IDS</td><td>OSSEC</td><td>Tripwire, AIDE, Falco, Samhain</td></tr>
+      <tr><td>DNS</td><td>dnscrypt-proxy</td><td>Pi-hole + DoH, Unbound, AdGuard Home</td></tr>
+      <tr><td>Firewall</td><td>iptables + ipset</td><td>nftables, pf (BSD/macOS), ufw + ipset</td></tr>
+      <tr><td>Brute-force</td><td>fail2ban</td><td>CrowdSec, DenyHosts, SSHGuard</td></tr>
+      <tr><td>Reverse proxy</td><td>nginx</td><td>Caddy, HAProxy, Traefik, Envoy</td></tr>
+      <tr><td>Tunnel / Ingress</td><td>Cloudflare Tunnel</td><td>ngrok, frp, Tailscale Funnel, bore</td></tr>
+      <tr><td>Threat Intel</td><td>Feodo + ET + Tor</td><td>AbuseIPDB, Spamhaus, AlienVault OTX</td></tr>
+    </tbody>
+  </table></div>
 </section>
 
-</div><!-- /container -->
+</div>
 
 <footer>
   <p>Educational reference — architecture concepts for private, layered security deployments.</p>
-  <p style="margin-top:8px">
-    <a href="https://github.com/ikonstas70/layered-security-stack">GitHub</a> · MIT License
-  </p>
+  <p style="margin-top:8px"><a href="https://github.com/ikonstas70/layered-security-stack">GitHub</a> &middot; MIT License</p>
 </footer>
 
 </body>
