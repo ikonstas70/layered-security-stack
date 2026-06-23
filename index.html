@@ -67,40 +67,90 @@
     .section-sub { color: var(--muted); font-size: 14px; margin-bottom: 36px; }
     h3 { font-size: 15px; font-weight: 600; color: var(--heading); margin-bottom: 10px; }
 
-    /* ── TOPOLOGY DIAGRAM ───────────────────────────────────── */
-    .topology-wrap {
+    /* ── TOPOLOGY ── */
+    .topo-shell {
       background: var(--bg2);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 14px;
       overflow: hidden;
     }
-    .topology-header {
+    .topo-bar {
       background: var(--bg3);
       border-bottom: 1px solid var(--border);
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      padding: 11px 18px;
+      display: flex; align-items: center; gap: 8px;
     }
     .dot { width: 10px; height: 10px; border-radius: 50%; }
-    .dot-r { background: #f85149; }
-    .dot-y { background: #f0883e; }
-    .dot-g { background: #39d353; }
-    .topology-header span { color: var(--muted); font-size: 12px; margin-left: auto; }
-    pre.topology {
-      padding: 28px 24px;
-      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-      font-size: 12.5px;
-      line-height: 1.55;
-      color: #8b949e;
-      overflow-x: auto;
-      white-space: pre;
+    .dot-r { background: #f85149; } .dot-y { background: #f0883e; } .dot-g { background: #39d353; }
+    .topo-bar .topo-label { color: var(--muted); font-size: 12px; margin-left: auto; font-family: 'SF Mono', monospace; }
+    .topo-body { padding: 28px 28px 32px; display: flex; flex-direction: column; gap: 0; }
+
+    /* tier */
+    .tier {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
     }
-    pre.topology .hl-g  { color: var(--green); }
-    pre.topology .hl-b  { color: var(--cyan); }
-    pre.topology .hl-p  { color: var(--purple); }
-    pre.topology .hl-o  { color: var(--orange); }
-    pre.topology .hl-w  { color: var(--heading); }
+    .tier-head {
+      padding: 9px 18px;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .tier-head::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .tier-client .tier-head { background: rgba(88,166,255,0.07); color: var(--cyan); border-color: rgba(88,166,255,0.15); }
+    .tier-client .tier-head::before { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+    .tier-client { border-color: rgba(88,166,255,0.2); }
+    .tier-vps .tier-head { background: rgba(188,140,255,0.07); color: var(--purple); border-color: rgba(188,140,255,0.15); }
+    .tier-vps .tier-head::before { background: var(--purple); box-shadow: 0 0 6px var(--purple); }
+    .tier-vps { border-color: rgba(188,140,255,0.2); }
+    .tier-internet .tier-head { background: rgba(240,136,62,0.07); color: var(--orange); border-color: rgba(240,136,62,0.15); }
+    .tier-internet .tier-head::before { background: var(--orange); box-shadow: 0 0 6px var(--orange); }
+    .tier-internet { border-color: rgba(240,136,62,0.2); }
+
+    .tier-nodes {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: 14px 16px;
+      background: var(--bg2);
+    }
+    .node {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 8px 13px;
+      flex: 1; min-width: 130px;
+      transition: border-color .2s, transform .15s;
+    }
+    .node:hover { transform: translateY(-1px); }
+    .tier-client .node:hover { border-color: rgba(88,166,255,0.4); }
+    .tier-vps    .node:hover { border-color: rgba(188,140,255,0.4); }
+    .tier-internet .node:hover { border-color: rgba(240,136,62,0.4); }
+    .node-icon { font-size: 15px; flex-shrink: 0; }
+    .node-info { display: flex; flex-direction: column; }
+    .node-name { font-size: 12px; font-weight: 600; color: var(--heading); line-height: 1.3; }
+    .node-sub  { font-size: 10px; color: var(--muted); font-family: 'SF Mono', monospace; line-height: 1.4; }
+
+    /* connector */
+    .topo-conn {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 8px 0;
+      gap: 0;
+    }
+    .conn-stem { width: 1px; height: 18px; background: linear-gradient(to bottom, rgba(88,166,255,0.3), rgba(88,166,255,0.1)); }
+    .conn-pill {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 14px;
+      font-size: 10px; letter-spacing: .4px;
+      color: var(--muted);
+      font-family: 'SF Mono', monospace;
+      white-space: nowrap;
+      margin: 3px 0;
+    }
+    .conn-arrow { color: rgba(88,166,255,0.5); font-size: 12px; line-height: 1; margin-top: 3px; }
 
     /* ── COMPONENT GRID ── */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
@@ -177,43 +227,59 @@
   <h2><span class="icon">🗺</span>Architecture Overview</h2>
   <p class="section-sub">Full-tunnel VPN exit node with layered defense — IDS, SIEM, encrypted DNS, and blocklists.</p>
 
-  <div class="topology-wrap">
-    <div class="topology-header">
+  <div class="topo-shell">
+    <div class="topo-bar">
       <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
-      <span>network-topology.txt</span>
+      <span class="topo-label">network-topology · layered-security-stack</span>
     </div>
-<pre class="topology">
-<span class="hl-w">┌──────────────────────────────────────────────────────────────────────────┐</span>
-<span class="hl-w">│                           CLIENT MACHINE                                 │</span>
-<span class="hl-w">│                                                                          │</span>
-<span class="hl-b">│  ┌──────────────┐  ┌─────────────┐  ┌──────────┐  ┌──────────────────┐  │</span>
-<span class="hl-b">│  │  WireGuard   │  │Wazuh Agent  │  │  Snort   │  │  OSSEC Agent     │  │</span>
-<span class="hl-b">│  │  Full Tunnel │  │    SIEM     │  │  IDS     │  │  Host-based IDS  │  │</span>
-<span class="hl-b">│  └──────┬───────┘  └─────────────┘  └──────────┘  └──────────────────┘  │</span>
-<span class="hl-w">│         │  AllowedIPs = 0.0.0.0/0 + ::/0  (all traffic)                 │</span>
-<span class="hl-w">└─────────┼────────────────────────────────────────────────────────────────┘</span>
-          <span class="hl-g">│</span>
-          <span class="hl-g">│  UDP encrypted (WireGuard ChaCha20-Poly1305)</span>
-          <span class="hl-g">│  PersistentKeepalive = 25s</span>
-          <span class="hl-g">▼</span>
-<span class="hl-w">┌──────────────────────────────────────────────────────────────────────────┐</span>
-<span class="hl-w">│                         VPS / EXIT NODE                                  │</span>
-<span class="hl-w">│                                                                          │</span>
-<span class="hl-p">│  ┌──────────┐  ┌──────────────┐  ┌────────┐  ┌───────────────────────┐  │</span>
-<span class="hl-p">│  │WireGuard │  │dnscrypt-proxy│  │ Snort  │  │  iptables + ipset     │  │</span>
-<span class="hl-p">│  │  Server  │  │  DoH :53     │  │  IDS   │  │  Feodo/ET/Tor blocks  │  │</span>
-<span class="hl-p">│  └──────────┘  └──────────────┘  └────────┘  └───────────────────────┘  │</span>
-<span class="hl-p">│  ┌──────────┐  ┌──────────────┐  ┌────────┐                             │</span>
-<span class="hl-p">│  │  nginx   │  │  fail2ban    │  │ Wazuh  │                             │</span>
-<span class="hl-p">│  │TLS 1.2/3 │  │  SSH guard   │  │Manager │                             │</span>
-<span class="hl-p">│  └──────────┘  └──────────────┘  └────────┘                             │</span>
-<span class="hl-w">│                        │  NAT MASQUERADE (iptables)                      │</span>
-<span class="hl-w">└────────────────────────┼─────────────────────────────────────────────────┘</span>
-                         <span class="hl-o">▼</span>
-                   <span class="hl-o">[ INTERNET ]</span>
-             <span class="hl-o">Exit IP = VPS public IP</span>
-             <span class="hl-o">Real client IP never exposed</span>
-</pre>
+    <div class="topo-body">
+
+      <div class="tier tier-client">
+        <div class="tier-head">Client Machine</div>
+        <div class="tier-nodes">
+          <div class="node"><span class="node-icon">🔐</span><div class="node-info"><span class="node-name">WireGuard</span><span class="node-sub">Full Tunnel · 0.0.0.0/0</span></div></div>
+          <div class="node"><span class="node-icon">📊</span><div class="node-info"><span class="node-name">Wazuh Agent</span><span class="node-sub">SIEM · FIM · Events</span></div></div>
+          <div class="node"><span class="node-icon">👁</span><div class="node-info"><span class="node-name">Snort IDS</span><span class="node-sub">Passive · local tap</span></div></div>
+          <div class="node"><span class="node-icon">🏠</span><div class="node-info"><span class="node-name">OSSEC Agent</span><span class="node-sub">HIDS · auth logs</span></div></div>
+          <div class="node"><span class="node-icon">☁️</span><div class="node-info"><span class="node-name">cloudflared</span><span class="node-sub">QUIC · no open ports</span></div></div>
+        </div>
+      </div>
+
+      <div class="topo-conn">
+        <div class="conn-stem"></div>
+        <div class="conn-pill">UDP · ChaCha20-Poly1305 · port 51820 · PersistentKeepalive 25s</div>
+        <div class="conn-arrow">▼</div>
+      </div>
+
+      <div class="tier tier-vps">
+        <div class="tier-head">VPS / Exit Node · 150.x.x.x</div>
+        <div class="tier-nodes">
+          <div class="node"><span class="node-icon">🔐</span><div class="node-info"><span class="node-name">WireGuard Server</span><span class="node-sub">:51820 · VPN endpoint</span></div></div>
+          <div class="node"><span class="node-icon">🌐</span><div class="node-info"><span class="node-name">dnscrypt-proxy</span><span class="node-sub">DoH · :53 · VPN only</span></div></div>
+          <div class="node"><span class="node-icon">👁</span><div class="node-info"><span class="node-name">Snort IDS</span><span class="node-sub">WAN + VPN taps</span></div></div>
+          <div class="node"><span class="node-icon">🧱</span><div class="node-info"><span class="node-name">iptables + ipset</span><span class="node-sub">NAT · 1,800+ blocks</span></div></div>
+          <div class="node"><span class="node-icon">🚫</span><div class="node-info"><span class="node-name">fail2ban</span><span class="node-sub">SSH guard · auto-ban</span></div></div>
+          <div class="node"><span class="node-icon">📊</span><div class="node-info"><span class="node-name">Wazuh Manager</span><span class="node-sub">Correlation · alerts</span></div></div>
+          <div class="node"><span class="node-icon">🔒</span><div class="node-info"><span class="node-name">nginx</span><span class="node-sub">TLS 1.2/1.3 · HSTS</span></div></div>
+        </div>
+      </div>
+
+      <div class="topo-conn">
+        <div class="conn-stem"></div>
+        <div class="conn-pill">NAT MASQUERADE · iptables POSTROUTING · client IP hidden</div>
+        <div class="conn-arrow">▼</div>
+      </div>
+
+      <div class="tier tier-internet">
+        <div class="tier-head">Internet</div>
+        <div class="tier-nodes">
+          <div class="node"><span class="node-icon">🌍</span><div class="node-info"><span class="node-name">Public Internet</span><span class="node-sub">Exit IP = VPS · real IP hidden</span></div></div>
+          <div class="node"><span class="node-icon">🔒</span><div class="node-info"><span class="node-name">Cloudflare Edge</span><span class="node-sub">DDoS · WAF · TLS</span></div></div>
+          <div class="node"><span class="node-icon">🛡</span><div class="node-info"><span class="node-name">Threat Feeds</span><span class="node-sub">Feodo · ET · Tor · daily</span></div></div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
